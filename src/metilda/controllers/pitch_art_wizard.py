@@ -1,11 +1,13 @@
 from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import shutil
 import tempfile
 import flask
 import uuid
 from flask import request, jsonify, send_file, flash
-from Postgres import Postgres
+from .Postgres import Postgres
 from metilda import app
 from metilda.default import MIN_PITCH_HZ, MAX_PITCH_HZ
 from metilda.services import audio_analysis, file_io, praat, utils
@@ -16,6 +18,7 @@ import wave
 import pympi
 import pathlib
 import matplotlib
+from six.moves import range
 matplotlib.use('agg')
 from pylab import *
 import xml.etree.ElementTree as ET
@@ -432,7 +435,7 @@ def add_new_user_from_admin():
         user = auth.create_user(
         email=request.form['email'],
         password=request.form['password'])
-        print('Sucessfully created new user: {0}'.format(user.uid))
+        print(('Sucessfully created new user: {0}'.format(user.uid)))
         # Insert user into DB
         with Postgres() as connection:
             postgres_insert_query = """ INSERT INTO users (USER_ID, USER_NAME, UNIVERSITY,
@@ -441,7 +444,7 @@ def add_new_user_from_admin():
             last_row_id = connection.execute_insert_query(postgres_insert_query, record_to_insert)
         return jsonify({'result': str(last_row_id)})
     except Exception as e:
-        print(str(e))
+        print((str(e)))
         return jsonify({'result': 'Error: '+str(e)})
 
 @app.route('/api/update-user-from-admin', methods=["POST"])
@@ -462,7 +465,7 @@ def update_user_from_admin():
         uid,
         email=email,
         password=password)
-        print('Sucessfully updated new user: {0}'.format(user.uid))
+        print(('Sucessfully updated new user: {0}'.format(user.uid)))
         # Update user in DB
         with Postgres() as connection:
             postgres_insert_query = """ UPDATE users SET USER_ID=%s,USER_NAME=%s, UNIVERSITY=%s WHERE USER_ID = %s"""
@@ -470,7 +473,7 @@ def update_user_from_admin():
             last_row_id = connection.execute_update_query(postgres_insert_query, record_to_insert)
         return jsonify({'result': str(last_row_id)})
     except Exception as e:
-        print(str(e))
+        print((str(e)))
         return jsonify({'result': 'Error: '+str(e)})
 
 @app.route('/api/delete-previous-user-roles', methods=["POST"])

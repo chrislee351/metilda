@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import subprocess
 from flask import Flask
 from flask_cors import CORS
@@ -13,9 +15,9 @@ _linkElanPraat_dir = "combined/"
 def runScript(scriptName, args):
    praatExec = ["praat_nogui", "--run", "--no-pref-files", scriptName];
    praatExec.extend(args)
-   print "script is: " + str(praatExec)
+   print("script is: " + str(praatExec))
    output = subprocess.check_output(praatExec);
-   print "output from praat.py is: " + str(output)
+   print("output from praat.py is: " + str(output))
    return output
 
 # Create flask app
