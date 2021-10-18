@@ -38,7 +38,7 @@ class Postgres(object):
         try:
             self.cursor.execute(query, record)
         except Exception as error:
-            print(('error execting query "{}", error: {}'.format(query, error)))
+            print(('error executing query "{}", error: {}'.format(query, error)))
             return None
         else:
             return self.cursor.rowcount
